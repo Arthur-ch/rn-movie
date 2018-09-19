@@ -3,20 +3,40 @@ import {
   StyleSheet,
   View,
   Text,
-  Button
+  Button,
+  Animated
 } from 'react-native';
 
 class IndexScreen extends Component {
+  state = {
+    fadeAnim: new Animated.Value(0),
+  }
   static navigationOptions = {
     title: 'Movies Recommand',
-  };
+  }
+  componentDidMount() {
+    Animated.timing(
+      this.state.fadeAnim,
+      {
+        toValue: 1,
+        duration: 1000,
+      }
+    ).start();
+  }
   render() {
     const { navigate } = this.props.navigation;
+    const { fadeAnim } = this.state;
+    const that = this;
     return (
       <View style={styles.container}>
-        <Text>
-          Welcom To Movies Recommand
-        </Text>
+        <Animated.View
+          style={{
+            opacity: fadeAnim,
+          }}>
+          <Text>
+            Welcom To Movies Recommand
+          </Text>
+        </Animated.View>
         <Button
           title="Get Started"
           onPress={() =>

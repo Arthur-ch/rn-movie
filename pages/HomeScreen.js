@@ -23,7 +23,7 @@ export default class HomeScreen extends Component {
     this.fetchData = this.fetchData.bind(this)
   }
   componentDidMount() {
-    this.fetchData();
+    this.fetchData()
   }
   fetchData() {
     fetch(MOVIEURL)
