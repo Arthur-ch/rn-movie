@@ -7,31 +7,38 @@ import {
   Animated
 } from 'react-native';
 
-class IndexScreen extends Component {
+export default class Index extends Component {
   state = {
     fadeAnim: new Animated.Value(0),
   }
-  static navigationOptions = {
-    title: 'Movies Recommand',
-  }
+  // static navigationOptions = {
+  //   title: 'Movies Recommand',
+  // }
   componentDidMount() {
     Animated.timing(
       this.state.fadeAnim,
       {
         toValue: 1,
         duration: 1000,
+        // useNativeDriver: true
       }
     ).start();
   }
   render() {
     const { navigate } = this.props.navigation;
     const { fadeAnim } = this.state;
-    const that = this;
     return (
       <View style={styles.container}>
         <Animated.View
           style={{
             opacity: fadeAnim,
+            transform: [{
+              translateY: fadeAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [150, 0],
+                perspective: 1000
+              }),
+            }],
           }}>
           <Text>
             Welcom To Movies Recommand
@@ -40,7 +47,7 @@ class IndexScreen extends Component {
         <Button
           title="Get Started"
           onPress={() =>
-            navigate('Home')
+            navigate('List')
           }
         />
       </View>
@@ -55,4 +62,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF'
   }
 })
-export default IndexScreen

@@ -1,31 +1,41 @@
 import React, { Component } from 'react';
+import { createStore } from 'redux';
+import { connect, Provider } from 'react-redux';
+import _ from 'lodash';
 import {
   Image,
   FlatList,
-  StyleSheet,
   Text,
   View
 } from 'react-native';
+import styles from './style';
+import { listReducer } from '../../reducer';
+const store = createStore(listReducer);
 
 const MOVIEURL = 'https://movie.douban.com/j/search_subjects?type=movie&tag=%E7%83%AD%E9%97%A8&page_limit=10&page_start=0';
 const INTERVAL = 3;
-export default class HomeScreen extends Component {
-  static navigationOptions = {
-    title: 'Movies List',
-  };
+class Movies extends Component {
+  // static navigationOptions = {
+  //   title: 'Movies List',
+  // };
+  unmount = false;
   constructor(props) {
     super(props);
     this.state = {
       movieList: [],
       loaded: false,
     }
-    // 在ES6中，自定义方法中的this，必须绑定，不然就为空
-    this.fetchData = this.fetchData.bind(this)
+    // 在ES6中，自定义方法中的this，必须绑定，不然就为空, 除非是箭头函数
+    // this.fetchData = this.fetchData.bind(this)
   }
   componentDidMount() {
-    this.fetchData()
+    _.delay(this.fetchData, 2000);
   }
-  fetchData() {
+  componentWillUnmount() {
+    // 防止组件卸载后，异步请求setState
+    this.unmount = true;
+  }
+  fetchData = () => {
     fetch(MOVIEURL)
       .then(res => res.json())
       .then(data => {
@@ -39,10 +49,14 @@ export default class HomeScreen extends Component {
         }).filter((item) => {
           return item.length !== 0
         })
+        if (this.unmount) {
+          return new Promise((_, reject) => { reject('component have unmounted!!!') });
+        }
         this.setState({
           movieList,
           loaded: true
         });
+        console.log('this.props', this.props);
       })
       .catch((error) => {
         console.log(error);
@@ -74,6 +88,7 @@ export default class HomeScreen extends Component {
     )
   }
   render() {
+    const { message } = this.props;
     const {
       movieList,
       loaded
@@ -91,48 +106,41 @@ export default class HomeScreen extends Component {
             </View>
           ) : (
             <View style={styles.loading}>
-              <Text>Loading...</Text>
+              <Text>{message}...</Text>
             </View>
           ) 
         }
-        
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingLeft: 10,
-    paddingRight: 10,
-    backgroundColor: '#F5FCFF'
-  },
-  loading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  list: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  listItem: {
-    marginRight: 10,
-    width: 115,
-    marginBottom: 40
-  },
-  thumbnail: {
-    width: 115,
-    height: 160
-  },
-  title: {
-    fontSize: 20,
-    textAlign: 'center'
-  },
-  rate: {
-    fontSize: 18,
-    textAlign: 'center'
+const mapStateToProps = (state) => {
+  return {
+    message: state.message
   }
-})
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setMessage: (message) => {
+      dispatch({
+        type: 'setMessage',
+        payload: message,
+      })
+    }
+  }
+}
+const ConnectedRoot = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Movies);
+
+export default class List extends Component {
+  render() {
+    const { state, actions } = this.props;
+    return (
+      <Provider store={store}>
+        <ConnectedRoot />
+      </Provider>
+    );
+  }
+}
