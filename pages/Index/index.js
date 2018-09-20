@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   View,
   Text,
   Button,
   Animated
 } from 'react-native';
-
+import styles from './style';
 export default class Index extends Component {
   state = {
     fadeAnim: new Animated.Value(0),
@@ -40,7 +39,7 @@ export default class Index extends Component {
               }),
             }],
           }}>
-          <Text>
+          <Text style={{ fontSize: 20 }}>
             Welcom To Movies Recommand
           </Text>
         </Animated.View>
@@ -54,11 +53,3 @@ export default class Index extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
-  }
-})

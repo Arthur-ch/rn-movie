@@ -1,5 +1,5 @@
 const defaultState = {
-  message: 'Loading',
+  message: 'Loading...',
   chatLog: '',
   statusMessage: '',
   userName: ''

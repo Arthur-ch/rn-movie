@@ -6,7 +6,8 @@ import {
   Image,
   FlatList,
   Text,
-  View
+  View,
+  Animated
 } from 'react-native';
 import styles from './style';
 import { listReducer } from '../../reducer';
@@ -24,12 +25,21 @@ class Movies extends Component {
     this.state = {
       movieList: [],
       loaded: false,
+      fadeIn: new Animated.Value(0)
     }
     // 在ES6中，自定义方法中的this，必须绑定，不然就为空, 除非是箭头函数
     // this.fetchData = this.fetchData.bind(this)
   }
   componentDidMount() {
-    _.delay(this.fetchData, 2000);
+    _.delay(this.fetchData, 500);
+    Animated.timing(
+      this.state.fadeIn,
+      {
+        toValue: 1,
+        duration: 1000,
+        // useNativeDriver: true
+      }
+    ).start();
   }
   componentWillUnmount() {
     // 防止组件卸载后，异步请求setState
@@ -52,11 +62,12 @@ class Movies extends Component {
         if (this.unmount) {
           return new Promise((_, reject) => { reject('component have unmounted!!!') });
         }
-        this.setState({
-          movieList,
-          loaded: true
-        });
-        console.log('this.props', this.props);
+        _.delay(() => {
+          this.setState({
+            movieList,
+            loaded: true
+          });
+        }, 1000);
       })
       .catch((error) => {
         console.log(error);
@@ -91,7 +102,8 @@ class Movies extends Component {
     const { message } = this.props;
     const {
       movieList,
-      loaded
+      loaded,
+      fadeIn
     } = this.state;
     return (
       <View style={styles.container}>
@@ -106,7 +118,20 @@ class Movies extends Component {
             </View>
           ) : (
             <View style={styles.loading}>
-              <Text>{message}...</Text>
+              <Animated.View
+                style={{
+                  opacity: fadeIn,
+                  transform: [{
+                    scale: fadeIn.interpolate({
+                      inputRange: [0, 0.5, 1],
+                      outputRange: [0, 0.5, 1],
+                      perspective: 1000
+                    })
+                  }]
+                }}
+              >
+                <Text style={{ fontSize: 20 }}>{message}</Text>
+              </Animated.View>
             </View>
           ) 
         }
