@@ -2,8 +2,8 @@ const defaultState = {
   message: 'Loading...',
   movieList: [],
   loaded: false,
-  page_limit: 10,
-  page_start: 1
+  page_limit: 12,
+  page_start: 0
 };
 export const listReducer = (state = defaultState, action) => {
   const { payload } = action;

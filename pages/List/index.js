@@ -5,6 +5,7 @@ import _ from 'lodash';
 import {
   Image,
   FlatList,
+  ScrollView,
   Text,
   View,
   Animated,
@@ -30,7 +31,7 @@ class Movies extends Component {
     // this.fetchMovieList = this.fetchMovieList.bind(this)
   }
   componentDidMount() {
-    _.delay(this.fetchMovieList, 500);
+    this.fetchMovieList();
     Animated.timing(
       this.state.fadeIn,
       {
@@ -44,65 +45,32 @@ class Movies extends Component {
     // 防止组件卸载后，异步请求setState
     this.unmount = true;
   }
-  fetchMovieList = (page_start = 1, page_limit = 10) => {
-    this.props.setPage_start({ page_start });
+  fetchMovieList = (page_start = 0, page_limit = 12) => {
+    this.props.setPage_start({ page_start: page_start / page_limit });
     this.props.setLoaded({ loaded: false });
-    fetch(`${MOVIEURL}&page_limit=${page_limit}&page_start=${page_start}`)
-      .then(res => res.json())
-      .then(data => {
-        const movieList = data.subjects.sort((a, b) => a.rate <= b.rate).map((item, idx)=> {
-          return idx % INTERVAL === 0 ? [
-            item,
-            ...data.subjects.slice(idx + 1, idx + INTERVAL).filter((list) => {
-              return list !== undefined
-            })
-          ] : [];
-        }).filter((item) => {
-          return item.length !== 0
-        })
-        if (this.unmount) {
-          return new Promise((_, reject) => { reject('component have unmounted!!!') });
-        }
-        _.delay(() => {
+    _.delay(() => {
+      fetch(`${MOVIEURL}&page_limit=${page_limit}&page_start=${page_start}`)
+        .then(res => res.json())
+        .then(data => {
+          const movieList = data.subjects;
+          if (this.unmount) {
+            return new Promise((_, reject) => { reject('component have unmounted!!!') });
+          }
           this.props.setMovieList({ movieList });
           this.props.setLoaded({ loaded: true });
-        }, 1000);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, 500);
   }
-  onNext() {
+  onNext = () => {
     const { page_start, page_limit } = this.props;
-    this.fetchMovieList(page_start + 1, page_limit);
+    this.fetchMovieList((page_start + 1) * page_limit, page_limit );
   }
-  onForward() {
-
-  }
-  renderMovie(list) {
-    return (
-      <View style={styles.list}>
-        {
-          list.item.map((item, idx) => {
-            return (
-              <View style={styles.listItem} key={idx}>
-                <Image
-                  source={{
-                    uri: item.cover,
-                    cache: "reload"
-                  }}
-                  style={styles.thumbnail}
-                />
-                <View>
-                  <Text style={styles.rate}>{item.rate}</Text>
-                  <Text ellipsizeMode="tail" numberOfLines={1} style={styles.title}>{item.title}</Text>
-                </View>
-              </View>
-            )
-          })
-        }
-      </View>
-    )
+  onForward = () => {
+    const { page_start, page_limit } = this.props;
+    this.fetchMovieList((page_start - 1) * page_limit || 0, page_limit);
   }
   render() {
     const {
@@ -118,11 +86,31 @@ class Movies extends Component {
         {
           loaded ? (
             <View>
-              <FlatList
-                data={movieList}
-                renderItem={this.renderMovie}
-                keyExtractor={(_, index) => index.toString()}
-              />
+              <ScrollView>
+                <View
+                  style={styles.list}
+                >
+                  {
+                    movieList.map((item, i) => {
+                      return (
+                        <View style={styles.listItem} key={i}>
+                          <Image
+                            source={{
+                              uri: item.cover,
+                              cache: "reload"
+                            }}
+                            style={styles.thumbnail}
+                          />
+                          <View>
+                            <Text style={styles.rate}>{item.rate}</Text>
+                            <Text ellipsizeMode="tail" numberOfLines={1} style={styles.title}>{item.title}</Text>
+                          </View>
+                        </View>
+                      )
+                    })
+                  }
+                </View>
+              </ScrollView>
               <View style={styles.btnGroup}>
                 <View style={styles.btnForward}>
                   <Button

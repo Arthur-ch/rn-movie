@@ -12,17 +12,20 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   list: {
-    flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    marginBottom: 50,
   },
   listItem: {
+    marginLeft: 10,
     marginRight: 10,
+    marginTop: 10,
+    marginBottom: 10,
     width: 115,
-    marginBottom: 40
   },
   thumbnail: {
-    width: 115,
+    width: '100%',
     height: 160
   },
   title: {
@@ -44,13 +47,13 @@ export default StyleSheet.create({
   },
   btnForward: {
     backgroundColor: '#4CB4E7',
-    width: 100,
+    flex: 4,
     paddingTop: 5,
     paddingBottom: 5,
   },
   btnNext: {
     backgroundColor: '#495A80',
-    flex: 1,
+    flex: 8,
     paddingTop: 5,
     paddingBottom: 5,
   },
