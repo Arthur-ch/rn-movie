@@ -3,8 +3,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 10,
-    paddingRight: 10,
+    position: 'relative',
     backgroundColor: '#F5FCFF'
   },
   loading: {
@@ -33,5 +32,26 @@ export default StyleSheet.create({
   rate: {
     fontSize: 18,
     textAlign: 'center'
-  }
+  },
+  btnGroup: {
+    flex: 1,
+    flexDirection: 'row',
+    position: 'absolute',
+    zIndex: 200,
+    // backgroundColor: 'black',
+    bottom: 0,
+    width: '100%'
+  },
+  btnForward: {
+    backgroundColor: '#4CB4E7',
+    width: 100,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  btnNext: {
+    backgroundColor: '#495A80',
+    flex: 1,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
 });
