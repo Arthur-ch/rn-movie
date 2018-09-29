@@ -10,13 +10,14 @@ import {
   View,
   Animated,
   Button,
+  Alert,
+  TouchableWithoutFeedback
 } from 'react-native';
 import styles from './style';
 import { listReducer } from '../../models/reducer';
 const store = createStore(listReducer);
 
 const MOVIEURL = 'https://movie.douban.com/j/search_subjects?type=movie&tag=%E7%83%AD%E9%97%A8';
-const INTERVAL = 3;
 class Movies extends Component {
   // static navigationOptions = {
   //   title: 'Movies List',
@@ -72,6 +73,10 @@ class Movies extends Component {
     const { page_start, page_limit } = this.props;
     this.fetchMovieList((page_start - 1) * page_limit || 0, page_limit);
   }
+  goDetail = (item) => {
+    const { navigation } = this.props;
+    navigation.navigate('detail', { id: item.id });
+  }
   render() {
     const {
       message,
@@ -93,19 +98,21 @@ class Movies extends Component {
                   {
                     movieList.map((item, i) => {
                       return (
-                        <View style={styles.listItem} key={i}>
-                          <Image
-                            source={{
-                              uri: item.cover,
-                              cache: "reload"
-                            }}
-                            style={styles.thumbnail}
-                          />
-                          <View>
-                            <Text style={styles.rate}>{item.rate}</Text>
-                            <Text ellipsizeMode="tail" numberOfLines={1} style={styles.title}>{item.title}</Text>
+                        <TouchableWithoutFeedback key={i} onPress={() => { this.goDetail(item) }}>
+                          <View style={styles.listItem}>
+                            <Image
+                              source={{
+                                uri: item.cover,
+                                cache: "reload"
+                              }}
+                              style={styles.thumbnail}
+                            />
+                            <View>
+                              <Text style={styles.rate}>{item.rate}</Text>
+                              <Text ellipsizeMode="tail" numberOfLines={1} style={styles.title}>{item.title}</Text>
+                            </View>
                           </View>
-                        </View>
+                        </TouchableWithoutFeedback>
                       )
                     })
                   }
@@ -117,6 +124,7 @@ class Movies extends Component {
                     onPress={this.onForward}
                     title="Forward"
                     color="#FFFFFF"
+                    // onPress={() => { Alert.alert("你点击了按钮！"); }}
                   />
                 </View>
                 <View style={styles.btnNext}>
@@ -142,7 +150,7 @@ class Movies extends Component {
                   }]
                 }}
               >
-                <Text style={{ fontSize: 20 }}>{message}</Text>
+                <Text style={{ fontSize: 40 }}>{message}</Text>
               </Animated.View>
             </View>
           ) 
@@ -152,20 +160,13 @@ class Movies extends Component {
   }
 }
 const mapStateToProps = (state) => {
-  const {
-    message,
-    movieList,
-    loaded,
-    page_limit,
-    page_start
-  } = state;
   return {
     message,
     movieList,
     loaded,
     page_limit,
     page_start
-  }
+  } = state;
 }
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -198,7 +199,7 @@ export default class List extends Component {
   render() {
     return (
       <Provider store={store}>
-        <ConnectedRoot />
+        <ConnectedRoot navigation={this.props.navigation}/>
       </Provider>
     );
   }

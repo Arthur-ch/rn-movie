@@ -4,30 +4,37 @@ import {
 import Profile from './pages/Profile';
 import Index from './pages/Index';
 import List from './pages/List';
+import Detail from './pages/Detail';
 
 const App = createStackNavigator({
-  Index: {
+  index: {
     screen: Index,
     navigationOptions: {
       title: 'Movies Recommand'
     }
   },
-  Profile: {
+  profile: {
     screen: Profile,
     navigationOptions: {
       title: 'Profile'
     }
   },
-  List: {
+  list: {
     screen: List,
     navigationOptions: {
       title: 'Movies List'
     }
+  },
+  detail: {
+    screen: Detail,
+    navigationOptions: {
+      title: 'Movies Detail'
+    }
   }
-}, {
-  initialRouteName: 'Index',
+},/*  {
+  initialRouteName: 'index',
   mode: 'modal',
   headerMode: 'float'
-});
+} */);
 
 export default App;

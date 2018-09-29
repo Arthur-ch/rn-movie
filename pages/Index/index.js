@@ -46,7 +46,7 @@ export default class Index extends Component {
         <Button
           title="Get Started"
           onPress={() =>
-            navigate('List')
+            navigate('list')
           }
         />
       </View>
