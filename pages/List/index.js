@@ -4,19 +4,17 @@ import { connect, Provider } from 'react-redux';
 import _ from 'lodash';
 import {
   Image,
-  FlatList,
   ScrollView,
   Text,
   View,
   Animated,
   Button,
-  Alert,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
 import styles from './style';
 import { listReducer } from '../../models/reducer';
 const store = createStore(listReducer);
-
+const topArr = [-110, -99, -88, -77, -66, -55, -44, -33, -22, -11, 0];
 const MOVIEURL = 'https://movie.douban.com/j/search_subjects?type=movie&tag=%E7%83%AD%E9%97%A8';
 class Movies extends Component {
   // static navigationOptions = {
@@ -108,8 +106,25 @@ class Movies extends Component {
                               style={styles.thumbnail}
                             />
                             <View>
-                              <Text style={styles.rate}>{item.rate}</Text>
-                              <Text ellipsizeMode="tail" numberOfLines={1} style={styles.title}>{item.title}</Text>
+                              <View style={styles.rateBox}>
+                                <View style={styles.ratingStar}>
+                                  <Image
+                                    source={{
+                                      uri: 'https://img3.doubanio.com/f/shire/0147ca9efddcac80050854590d26bee587b008df/pics/rating_icons/ic_rating_s@2x.png',
+                                      cache: "reload"
+                                    }}
+                                    style={[styles.startImage, {
+                                      top: topArr[Math.round(item.rate)]
+                                    }]}
+                                  />
+                                </View>
+                                <View style={styles.rate}>  
+                                  <Text style={styles.rateText}>{item.rate}</Text>
+                                </View>
+                              </View>
+                              <View>
+                                <Text ellipsizeMode="tail" numberOfLines={1} style={styles.title}>{item.title}</Text>
+                              </View>
                             </View>
                           </View>
                         </TouchableWithoutFeedback>

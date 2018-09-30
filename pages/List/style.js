@@ -30,11 +30,39 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    textAlign: 'center'
   },
-  rate: {
-    fontSize: 18,
-    textAlign: 'center'
+  rateBox: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    marginBottom: 10
+  },
+  rateText: {
+    fontSize: 15,
+    color: '#e09015',
+  },
+  ratingStar: {
+    marginTop: 4,
+    width: 80,
+    height: 11,
+    overflow: 'hidden'
+  },
+  startImage: {
+    width: 55,
+    height: 121,
+    position: 'relative',
+    // top: -110, 0 颗
+    // top: -99,  1 颗
+    // top: -88   2 颗
+    // top: -77   3 颗
+    // top: -66,  4 颗
+    // top: -55,  5 颗
+    // top: -44   6 颗
+    // top: -33,  7 颗
+    // top: -22,  8 颗  
+    // top: -11,  9 颗
+    // top: 0    10 颗
   },
   btnGroup: {
     flex: 1,
