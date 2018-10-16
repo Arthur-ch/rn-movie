@@ -1,5 +1,5 @@
 const defaultState = {
-  message: 'Loading...',
+  message: 'loading...',
   movieList: [],
   loaded: false,
   page_limit: 12,

@@ -12,15 +12,15 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import styles from './style';
+import url from '../../config/url';
 import { listReducer } from '../../models/reducer';
 const store = createStore(listReducer);
 const topArr = [-110, -99, -88, -77, -66, -55, -44, -33, -22, -11, 0];
-const MOVIEURL = 'https://movie.douban.com/j/search_subjects?type=movie&tag=%E7%83%AD%E9%97%A8';
+const MOVIEURL = `${url.MOVIEURL}/j/search_subjects?type=movie&tag=热门`;
 class Movies extends Component {
   // static navigationOptions = {
   //   title: 'Movies List',
   // };
-  unmount = false;
   constructor(props) {
     super(props);
     this.state = {
@@ -109,10 +109,7 @@ class Movies extends Component {
                               <View style={styles.rateBox}>
                                 <View style={styles.ratingStar}>
                                   <Image
-                                    source={{
-                                      uri: 'https://img3.doubanio.com/f/shire/0147ca9efddcac80050854590d26bee587b008df/pics/rating_icons/ic_rating_s@2x.png',
-                                      cache: "reload"
-                                    }}
+                                    source={require('../../asset/ic_rating_s.png')}
                                     style={[styles.startImage, {
                                       top: topArr[Math.round(item.rate)]
                                     }]}

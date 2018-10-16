@@ -44,9 +44,15 @@ export default class Index extends Component {
           </Text>
         </Animated.View>
         <Button
-          title="Get Started"
+          title="View List"
           onPress={() =>
             navigate('list')
+          }
+        />
+        <Button
+          title="View Weather"
+          onPress={() =>
+            navigate('weather')
           }
         />
       </View>

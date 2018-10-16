@@ -5,6 +5,7 @@ import Profile from './pages/Profile';
 import Index from './pages/Index';
 import List from './pages/List';
 import Detail from './pages/Detail';
+import Weather from './pages/Weather';
 
 const App = createStackNavigator({
   index: {
@@ -29,6 +30,12 @@ const App = createStackNavigator({
     screen: Detail,
     navigationOptions: {
       title: 'Movies Detail'
+    }
+  },
+  weather: {
+    screen: Weather,
+    navigationOptions: {
+      title: 'Weather'
     }
   }
 },/*  {

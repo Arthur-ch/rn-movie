@@ -43,7 +43,7 @@ export default StyleSheet.create({
     color: '#e09015',
   },
   ratingStar: {
-    marginTop: 4,
+    marginTop: 2.5,
     width: 80,
     height: 11,
     overflow: 'hidden'
